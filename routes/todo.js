@@ -1,5 +1,6 @@
 const {Router} = require('express')
-const router = Router() 
+const Todo = require('../models/todo')
+const router = Router()
 
 // Получение списка задач
 router.get('/', (req, res) => {
@@ -7,8 +8,20 @@ router.get('/', (req, res) => {
 })
 
 // Создание новой задачи
-router.post('/', (req, res) => {
-
+router.post('/', async (req, res) => {
+    try { 
+        const todo = await Todo.create({ //Заполняем таблицу базы данных из формы
+            title: req.body.title,
+            done: false
+        })
+        res.status(201).json({ //Возвращаем сохранённый объект
+            todo
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: `Server error: ${error}`
+        })
+    }
 })
 
 // Изменение задачи
