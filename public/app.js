@@ -9,25 +9,31 @@ new Vue({
         }
     },
     methods: {
-        addTodo() {
+        async addTodo() {
             const title = this.todoTitle.trim()
             if (!title) {
                 return
             }
-            fetch('/api/todo', {
+            const response = await fetch('/api/todo', {
                 method: 'post',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({title}) 
             })
-                .then(res => res.json())
-                .then(({todo}) => {
-                    // console.log(todo)
-                    this.todos.push(todo)
-                    this.todoTitle = ''
-                })
-                .catch(error => {
-                    console.log(error)
-                })
+                const res = await response.json()
+                const todo = res.todo
+                // console.log(todo)
+                this.todos.push(todo)
+                this.todoTitle = ''
+             
+                // .then(res => res.json())
+                // .then(({todo}) => {
+                //     // console.log(todo)
+                //     this.todos.push(todo)
+                //     this.todoTitle = ''
+                // })
+                // .catch(error => {
+                //     console.log(error)
+                // })
            /*  this.todos.push({
                 title: title,
                 id: Math.random(),
